@@ -1,0 +1,34 @@
+export PATH=/usr/local/opt/openssl/bin:~/bin:/usr/local/bin:/sbin:/usr/bin:/bin:/usr/local/sbin:$PATH
+
+export HISTCONTROL="ignoreboth"
+export HISTFILESIZE=10000
+export HISTSIZE=10000
+export SAVEHIST=10000
+
+export AWS_DEFAULT_REGION=us-east-1
+export AWS_REGION=us-east-1
+
+export EDITOR=vim
+export VISUAL=vim
+
+export DJANGO_LOCAL_DEPLOY=true
+export DJANGO_SETTINGS_MODULE=paymentworks.settings
+# set where virutal environments will live
+export WORKON_HOME=$HOME/.virtualenvs
+# ensure all new environments are isolated from the site-packages directory
+export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
+# use the same directory for virtualenvs as virtualenvwrapper
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+# makes pip detect an active virtualenv and install to it
+export PIP_RESPECT_VIRTUALENV=true
+if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+else
+    echo "WARNING: Can't find virtualenvwrapper.sh"
+fi
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH="/usr/local/opt/curl/bin:$PATH"
+
+export LDFLAGS=-L/usr/local/opt/openssl/lib
+export CPPFLAGS=-I/usr/local/opt/openssl/include
