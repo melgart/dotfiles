@@ -36,3 +36,5 @@ alias vi='vim'
 alias flushroute='sudo ifconfig en0 down && sudo route flush && sudo ifconfig en0 up'
 alias flushroutes='flushroute && flushroute && flushroute && flushroute'
 alias runtests='cd /src/paymentworks/app && python manage.py test --parallel=5'
+
+alias ssha='eval `ssh-agent` && ssh-add -t 3600 ~/.ssh/aws_id_rsa'
