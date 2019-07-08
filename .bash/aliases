@@ -38,3 +38,22 @@ alias flushroutes='flushroute && flushroute && flushroute && flushroute'
 alias runtests='cd /src/paymentworks/app && python manage.py test --parallel=5'
 
 alias ssha='eval `ssh-agent` && ssh-add -t 28800 ~/.ssh/aws_id_rsa'
+alias presign='aws --profile monolith s3 presign s3://'
+
+
+
+encr() {
+    if [ "$#" -ne 2 ]; then
+        echo "encr: requires infile and outfile parameters"
+    fi
+
+    openssl aes-256-cbc -salt -in "$1"  -out "$2"
+}
+
+
+decr() {
+    if [ "$#" -ne 2 ]; then
+        echo "decr: requires infile and outfile parameters"
+    fi
+    openssl aes-256-cbc -d -salt -in "$1" -out "$2"
+}
