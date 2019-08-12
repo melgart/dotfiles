@@ -1,8 +1,26 @@
+Host 10.0.*.*
+    User melgart
+    IdentityFile ~/.ssh/aws_id_rsa
+    ProxyCommand ssh -W %h:%p nata
+    StrictHostKeyChecking no
+   
 Host vpn
     HostName vpn1.paymentworks.com
     IdentityFile ~/.ssh/aws_id_rsa
     StrictHostKeyChecking yes
     User melgart
+
+Host vpn2
+    HostName 52.205.2.232
+    IdentityFile ~/.ssh/openvpn-server-keypair
+    StrictHostKeyChecking yes
+    User ec2-user
+
+Host vpn2
+    HostName 3.81.29.162
+    IdentityFile ~/.ssh/aws_id_rsa
+    User melgart
+
 
 Host build
     HostName build.paymentworks.com
@@ -10,11 +28,24 @@ Host build
     StrictHostKeyChecking no
     User ec2-user
 
+Host lambda-test
+    HostName 10.0.11.20
+    IdentityFile ~/.ssh/pwkey.pem
+    StrictHostKeyChecking no
+    ProxyCommand ssh -W %h:%p natc
+    User ec2-user
+
 Host dev-build
-    HostName 10.0.10.132
+    HostName 35.171.185.65
+    IdentityFile ~/.ssh/pwkey.pem
+    User ubuntu
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
+Host old-dev-build
+    HostName 54.82.215.89
     IdentityFile ~/.ssh/aws_id_rsa
     User melgart
-    ProxyCommand ssh -W %h:%p devnat
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
@@ -24,8 +55,14 @@ Host devnat
     IdentityFile ~/.ssh/aws_id_rsa
     User melgart
 
+Host devmongo
+    HostName 10.0.8.227
+    User melgart
+    IdentityFile ~/.ssh/aws_id_rsa
+    ProxyCommand ssh -W %h:%p devnat
+
 Host lweb
-    HostName 10.0.1.154
+    HostName 10.0.4.187
     User melgart
     ProxyCommand ssh -W %h:%p devnat
     IdentityFile ~/.ssh/aws_id_rsa
@@ -48,6 +85,12 @@ Host lcelery2
     ProxyCommand ssh -W %h:%p devnat
     IdentityFile ~/.ssh/aws_id_rsa
 
+Host lcelery2a
+    HostName 10.0.4.125
+    User melgart
+    ProxyCommand ssh -W %h:%p devnat
+    IdentityFile ~/.ssh/aws_id_rsa
+
 Host lweb3
     HostName 10.0.1.242
     User melgart
@@ -61,13 +104,13 @@ Host lcelery3
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host lcelery32
-    HostName 10.0.4.91
+    HostName 10.0.4.82
     User melgart
     ProxyCommand ssh -W %h:%p devnat
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host lcelery33
-    HostName 10.0.1.63
+    HostName 10.0.4.55
     User melgart
     ProxyCommand ssh -W %h:%p devnat
     IdentityFile ~/.ssh/aws_id_rsa
@@ -87,25 +130,25 @@ Host natc
 Host pweba
     HostName 10.0.2.115
     User melgart
-    ProxyCommand ssh -W %h:%p nata
+    ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host pwebc
     HostName 10.0.66.112
     User melgart
-    ProxyCommand ssh -W %h:%p nata
+    ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host pcelerya
     HostName 10.0.2.201
     User melgart
-    ProxyCommand ssh -W %h:%p nata
+    ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host pceleryc
-    HostName 10.0.66.160
+    HostName 10.0.66.67
     User melgart
-    ProxyCommand ssh -W %h:%p nata
+    ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host demo
@@ -133,13 +176,14 @@ Host natc
     StrictHostKeyChecking no
     User melgart
 
-Host tools
-    HostName prodtools.paymentworks.com
+Host tools tools.paymentworks.com
+    HostName 10.0.68.73
     User melgart
+    ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
-Host tools2
-    HostName 52.87.178.97
+Host sentry sentry.paymentworks.com
+    HostName 3.213.45.29
     User melgart
     IdentityFile ~/.ssh/aws_id_rsa
 
@@ -179,33 +223,22 @@ Host smongo
     ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
-Host mongo1
+Host mongo1 mongo1.paymentworks.com
     HostName 10.0.3.76
     User melgart
     ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
-Host mongo2
-    HostName 10.0.67.103
-    User melgart
+Host mongo2 mongo2.paymentworks.com
+    HostName 10.0.67.25
+    User matias
     ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
-Host mongo3
+Host mongo3 mongo3.paymentworks.com
     HostName 10.0.99.89
     User melgart
     ProxyCommand ssh -W %h:%p natc
-    IdentityFile ~/.ssh/aws_id_rsa
-
-Host pi
-    HostName pi
-    User pi
-    IdentityFile ~/.ssh/id_rsa
-
-Host devmongo
-    HostName 10.0.8.227
-    User melgart
-    ProxyCommand ssh -W %h:%p devnat
     IdentityFile ~/.ssh/aws_id_rsa
 
 Host ppwebe
@@ -214,20 +247,19 @@ Host ppwebe
     ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
 
-Host ppmongo
-    HostName 10.0.26.197
-    User melgart
-    ProxyCommand ssh -W %h:%p nata
-    IdentityFile ~/.ssh/aws_id_rsa
-
-Host ppcelerye
+Host ppceleryf
     HostName 10.0.80.191
-    User melgart
-    ProxyCommand ssh -W %h:%p nata
-    IdentityFile ~/.ssh/aws_id_rsa
-
-Host redash
-    HostName 10.0.55.10
     User melgart
     ProxyCommand ssh -W %h:%p natc
     IdentityFile ~/.ssh/aws_id_rsa
+
+Host ppmongo
+    HostName 10.0.26.197
+    User melgart
+    ProxyCommand ssh -W %h:%p natc
+    IdentityFile ~/.ssh/aws_id_rsa
+
+Host redash
+    HostName 18.233.107.229
+    User ubuntu
+    IdentityFile ~/.ssh/pwkey.pem

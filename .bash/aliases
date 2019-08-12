@@ -40,6 +40,8 @@ alias runtests='cd /src/paymentworks/app && python manage.py test --parallel=5'
 alias ssha='eval `ssh-agent` && ssh-add -t 28800 ~/.ssh/aws_id_rsa'
 alias presign='aws --profile monolith s3 presign s3://'
 
+alias wlogs='i2cssh -F -d row --iterm2 -m $(ec2 -profile=monolith -tag="Name:Prod Web" -output=ip) -p hipster-green --broadcast'
+alias clogs='i2cssh -F -d row --iterm2 -m $(ec2 -profile=monolith -tag="Name:Prod Celery" -output=ip) -p grape --broadcast'
 
 
 encr() {
