@@ -1,4 +1,4 @@
-export PATH=/usr/local/opt/openssl/bin:~/bin:/usr/local/bin:/sbin:/usr/bin:/bin:/usr/local/sbin:$PATH
+export PATH=/usr/local/opt/openssl/bin:~/bin:/usr/local/bin:/sbin:/usr/bin:/bin:/usr/local/sbin:$HOME/.cargo/bin:$PATH:/usr/local/go/bin
 
 export HISTCONTROL="ignoreboth"
 export HISTFILESIZE=10000
@@ -32,3 +32,17 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 
 export LDFLAGS=-L/usr/local/opt/openssl/lib
 export CPPFLAGS=-I/usr/local/opt/openssl/include
+# this is needed to run tests in parallel, not sure when this started 
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES   
+
+export GOPATH=${HOME}/Desktop/src/paymentworks/go
+export PATH=${PATH}:${GOPATH}/bin
+
+export RUBY_HOME=/usr/local/opt/ruby/bin
+export PATH=$RUBY_HOME:$PATH
+
+export GEM_PATH=~/.gem/ruby/2.6.0
+export PATH=$GEM_PATH/bin:$PATH
+
+export MYSQL_HOME=/usr/local/mysql-5.7.28-macos10.14-x86_64
+export PATH=$MYSQL_HOME/bin:$PATH

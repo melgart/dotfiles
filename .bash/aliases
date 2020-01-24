@@ -35,14 +35,10 @@ alias tailsftp='tail -F /etc/proftpd/proftpd-trace.log'
 alias vi='vim'
 alias flushroute='sudo ifconfig en0 down && sudo route flush && sudo ifconfig en0 up'
 alias flushroutes='flushroute && flushroute && flushroute && flushroute'
-alias runtests='cd /src/paymentworks/app && python manage.py test --parallel=5'
+alias runtests='cd ~/src/paymentworks/app && python manage.py test --parallel=5'
 
 alias ssha='eval `ssh-agent` && ssh-add -t 28800 ~/.ssh/aws_id_rsa'
 alias presign='aws --profile monolith s3 presign s3://'
-
-alias wlogs='i2cssh -F -d row --iterm2 -m $(ec2 -profile=monolith -tag="Name:Prod Web" -output=ip) -p hipster-green --broadcast'
-alias clogs='i2cssh -F -d row --iterm2 -m $(ec2 -profile=monolith -tag="Name:Prod Celery" -output=ip) -p grape --broadcast'
-
 
 encr() {
     if [ "$#" -ne 2 ]; then
@@ -58,4 +54,43 @@ decr() {
         echo "decr: requires infile and outfile parameters"
     fi
     openssl aes-256-cbc -d -salt -in "$1" -out "$2"
+}
+
+
+wlogs() {
+    LOG_COLOR="green"
+    ENVIRONMENT="Prod"  # default
+    if [ "$#" -eq 1 ]; then
+        LOG_COLOR=$1
+    elif [ "$#" -eq 2 ]; then
+        LOG_COLOR=$1
+        ENVIRONMENT=$2
+    fi
+    i2cssh -A -g nata -F -Xo="\"StrictHostKeyChecking no\"" -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:$ENVIRONMENT Web" -output=ip` -p $LOG_COLOR --broadcast
+}
+
+clogs() {
+    LOG_COLOR="pink"
+    if [ "$#" -eq 1 ]; then
+        LOG_COLOR=$1
+    fi
+    i2cssh -A -g nata -F -Xo="\"StrictHostKeyChecking no\"" -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:Prod Celery" -output=ip` -p $LOG_COLOR --broadcast
+}
+
+llogs() {
+  #
+  # llogs <env> [<profile name>]
+  #
+    #set -x
+    local PW_ENV=
+    local LOG_COLOR="green"
+
+    if [ "$#" -eq 1 ]; then
+        PW_ENV=$1 
+    elif [ "$#" -eq 2 ]; then
+        PW_ENV=$1
+        LOG_COLOR=$2
+    fi
+    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:${PW_ENV} Web" -tag="Name:${PW_ENV} Web" -output=ip` --broadcast -p chalkboard
+    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:${PW_ENV} Celery" -tag="Name:${PW_ENV} Celery" -output=ip` --broadcast -p chalkboard
 }
