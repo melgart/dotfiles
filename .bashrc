@@ -14,9 +14,21 @@ export PS1='\w$(__git_ps1 " (%s)") $ '
 . ~/.bash/env
 
 
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.bash
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash ] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.bash
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+#export PATH="$PATH:$HOME/.rvm/bin"
+#
+#export CPPFLAGS="-I/usr/local/opt/openjdk/include"
+#export LDFLAGS="-L/usr/local/opt/zlib/lib" 
+#export CPPFLAGS="-I/usr/local/opt/zlib/include"
+#
+#
+
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+. "$HOME/.cargo/env"
+
+# Added by serverless binary installer
+export PATH="$HOME/.serverless/bin:$PATH"
