@@ -12,28 +12,28 @@ export EDITOR=vim
 export VISUAL=vim
 
 export DJANGO_LOCAL_DEPLOY=true
-export DJANGO_SETTINGS_MODULE=paymentworks.settings
+#export DJANGO_SETTINGS_MODULE=paymentworks.settings
 # set where virutal environments will live
-export WORKON_HOME=$HOME/.virtualenvs
+#export WORKON_HOME=$HOME/.virtualenvs
 # ensure all new environments are isolated from the site-packages directory
-export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
+#export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
 # use the same directory for virtualenvs as virtualenvwrapper
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
+#export PIP_VIRTUALENV_BASE=$WORKON_HOME
 # makes pip detect an active virtualenv and install to it
 export PIP_RESPECT_VIRTUALENV=true
-if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
-    source /usr/local/bin/virtualenvwrapper.sh
-else
-    echo "WARNING: Can't find virtualenvwrapper.sh"
-fi
+#if [[ -r /Users/matias/Library/Python/2.7/bin/virtualenvwrapper.sh ]]; then
+#    source /Users/matias/Library/Python/2.7/bin/virtualenvwrapper.sh
+#else
+#    echo "WARNING: Can't find virtualenvwrapper.sh"
+#fi
 
 export JAVA_HOME=$(/usr/libexec/java_home)
-export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="/Users/matias/bin:/usr/local/opt/curl/bin:$PATH"
 
-export LDFLAGS=-L/usr/local/opt/openssl/lib
-export CPPFLAGS=-I/usr/local/opt/openssl/include
+#export LDFLAGS=-L/usr/local/opt/openssl/lib
+#export CPPFLAGS=-I/usr/local/opt/openssl/include
 # this is needed to run tests in parallel, not sure when this started 
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES   
+#export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES   
 
 export GOPATH=${HOME}/Desktop/src/paymentworks/go
 export PATH=${PATH}:${GOPATH}/bin
@@ -41,8 +41,16 @@ export PATH=${PATH}:${GOPATH}/bin
 export RUBY_HOME=/usr/local/opt/ruby/bin
 export PATH=$RUBY_HOME:$PATH
 
-export GEM_PATH=~/.gem/ruby/2.6.0
+export GEM_PATH=~/.gem/
 export PATH=$GEM_PATH/bin:$PATH
 
-export MYSQL_HOME=/usr/local/mysql-5.7.28-macos10.14-x86_64
+export MYSQL_HOME=/usr/local/opt/mysql@5.7
 export PATH=$MYSQL_HOME/bin:$PATH
+
+#export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+#export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+#export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+
+PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
+export GPG_TTY=$(tty)

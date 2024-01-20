@@ -43,17 +43,19 @@ alias presign='aws --profile monolith s3 presign s3://'
 encr() {
     if [ "$#" -ne 2 ]; then
         echo "encr: requires infile and outfile parameters"
+        return -1
     fi
 
-    openssl aes-256-cbc -salt -in "$1"  -out "$2"
+    openssl enc -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -salt -in "$1"  -out "$2"
 }
 
 
 decr() {
     if [ "$#" -ne 2 ]; then
         echo "decr: requires infile and outfile parameters"
+        return -1
     fi
-    openssl aes-256-cbc -d -salt -in "$1" -out "$2"
+    openssl enc -aes-256-cbc -md sha512 -pbkdf2 -iter 100000 -d -salt -in "$1" -out "$2"
 }
 
 
@@ -70,20 +72,23 @@ wlogs() {
 }
 
 clogs() {
-    LOG_COLOR="pink"
+    LOG_COLOR="argonaut"
+    ENVIRONMENT="Prod"  # default
     if [ "$#" -eq 1 ]; then
         LOG_COLOR=$1
+    elif [ "$#" -eq 2 ]; then
+        LOG_COLOR=$1
+        ENVIRONMENT=$2
     fi
-    i2cssh -A -g nata -F -Xo="\"StrictHostKeyChecking no\"" -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:Prod Celery" -output=ip` -p $LOG_COLOR --broadcast
+    i2cssh -A -g nata -F -Xo="\"StrictHostKeyChecking no\"" -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:$ENVIRONMENT" -output=ip` -p $LOG_COLOR 
 }
 
 llogs() {
   #
   # llogs <env> [<profile name>]
   #
-    #set -x
     local PW_ENV=
-    local LOG_COLOR="green"
+    local LOG_COLOR="argonaut"
 
     if [ "$#" -eq 1 ]; then
         PW_ENV=$1 
@@ -91,6 +96,42 @@ llogs() {
         PW_ENV=$1
         LOG_COLOR=$2
     fi
-    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:${PW_ENV} Web" -tag="Name:${PW_ENV} Web" -output=ip` --broadcast -p chalkboard
-    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2 -profile=monolith -tag="Name:${PW_ENV} Celery" -tag="Name:${PW_ENV} Celery" -output=ip` --broadcast -p chalkboard
+    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2ip ${PW_ENV} Web"` 
+    i2cssh -A -g devnat -F --rows 2 -d row --iterm2 -m `ec2ip ${PW_ENV} Celery"`
 }
+
+ec2i() {
+    local RESULT=$(aws ec2 describe-instances --query "Reservations[*].Instances[*].{PrivateIP:PrivateIpAddress,PublicIP:PublicIpAddress,Type:InstancehistoryType,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}"  --filters "Name=instance-state-name,Values=running" "Name=tag:Name,Values='*'"  --output table)
+    echo "$RESULT"
+}
+
+ec2ip() {
+    local SEARCH_TERM=$1
+    RESULT=`/usr/local/bin/aws --profile monolith-readonly ec2 describe-instances --filters "Name=tag:Name,Values=${SEARCH_TERM}*" --output text --query 'Reservations[*].Instances[*].PrivateIpAddress' | tr '\n' ',' | sed 's/,$/\n/'`
+    echo $RESULT
+}
+
+loadssh() {
+    local TARGET_HOST=$1
+    RESULT=`ec2ip "${TARGET_HOST}"`
+    echo "Found IP: $RESULT"
+    sshload ${RESULT}
+}
+
+sshload() {
+    local TARGET_HOST=$1
+    ssh -J devnat -i ~/.ssh/pw-load-key.pem ec2-user@${TARGET_HOST}
+}
+
+
+shred() {
+    local TARGET=$1
+    gshred -vzu -n 25 "${TARGET}"
+}
+
+
+alias rb2="docker compose -f docker-compose.yml build && docker compose -f docker-compose.yml up -d && docker exec -it monolith-web bash"
+alias rb3="docker compose -f docker-compose.python3.yml build && docker compose -f docker-compose.python3.yml up -d && docker exec -it monolith-web-py3 bash"
+alias de2="docker exec -it monolith-web bash"
+alias de3="docker exec -it monolith-web-py3 bash"
+alias awssso="/usr/local/bin/aws sso login --profile monolith-readonly"

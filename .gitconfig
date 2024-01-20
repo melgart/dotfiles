@@ -1,6 +1,13 @@
 [user]
-	email = matias@paymentworks.com
 	name = matias elgart
+	email = matias@paymentworks.com
+	signingkey = B35E57F3A40A4276166594593166F8B3A40309B0
+[commit]
+	gpgsign = true
+[gpg]
+	#program = /Users/matias/bin/gpg-no-tty.sh
+[tag]
+	gpgSign = true
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
